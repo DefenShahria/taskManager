@@ -2,15 +2,10 @@
 
 A new Flutter project.
 
-## Getting Started
+![363489262_1463107851118296_2200127652713250063_n](https://github.com/DefenShahria/taskManager/assets/101829607/a52336fe-c421-40c1-93bf-525f8ac9fa12)
+![363854041_668410778508740_38259593147813122_n](https://github.com/DefenShahria/taskManager/assets/101829607/97a7682f-d2d6-4720-b187-94320d42099d)
+![363812748_1361698088060158_414010018110881089_n](https://github.com/DefenShahria/taskManager/assets/101829607/04bd0f8e-7d8c-47f0-8ed8-ce32d819b74d)
+![363835881_1536448213975518_6874113444423627312_n](https://github.com/DefenShahria/taskManager/assets/101829607/753ffc42-9cb0-4c45-9b10-29086c898dcc)
+![364521247_589838249893475_5032625425170589029_n](https://github.com/DefenShahria/taskManager/assets/101829607/d8a5c765-612a-4b6b-888a-2d82e47be8cf)
+![363701821_1442465716573964_8441988761596546551_n](https://github.com/DefenShahria/taskManager/assets/101829607/6da89963-7229-4ec4-b447-997dff340840)
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
