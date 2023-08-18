@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:module11/network/url.dart';
-import 'package:module11/network/networkcall.dart';
-import 'package:module11/network/networkresponse.dart';
+import 'package:get/get.dart';
 import 'package:module11/screen/basescreen.dart';
 import 'package:module11/screen/forgetpass.dart';
 import 'package:module11/screen/signup.dart';
-import 'package:module11/utils/signin_Model.dart';
-import 'package:module11/utils/signindata.dart';
-
+import 'package:module11/state_manager/signin_controller.dart';
 import '../widgets/backscreen.dart';
 
 class loginscrn extends StatefulWidget {
@@ -22,45 +18,6 @@ class _loginscrnState extends State<loginscrn> {
   final TextEditingController _passtecontroller = TextEditingController();
 
   final GlobalKey<FormState> _fromkey = GlobalKey<FormState>();
-
-  bool _signin = false;
-
-  Future<void> signin() async {
-    _signin = true;
-if(mounted){
-  setState(() {
-
-  });
-}
-    Map<String, dynamic> requestbody = {
-      "email": _emailtecontroller.text.trim(),
-      "password": _passtecontroller.text
-    };
-print(requestbody);
-    final Networkresponse response =
-        await Networkcall().postRequest(urls.login, requestbody , islogin:true );
-    _signin = false;
-    if(mounted){
-      setState(() {
-
-      });
-    }
-    if (response.issuccess) {
-      Signinmodel model = Signinmodel.fromJson(response.body!);
-      await Signindata.saveinfo(model);
-      if (mounted) {
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => const bottomnave()),
-            (route) => false);
-      }
-    } else {
-      if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text("Sign in Failed -_-")));
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,19 +44,18 @@ print(requestbody);
               const SizedBox(
                 height: 8,
               ),
-               TextFormField(
-                 controller: _emailtecontroller,
+              TextFormField(
+                controller: _emailtecontroller,
                 keyboardType: TextInputType.emailAddress,
                 decoration: InputDecoration(
                   hintText: 'Email',
                 ),
                 validator: (String? value) {
-                  if (value?.isEmpty ?? true)  {
+                  if (value?.isEmpty ?? true) {
                     return 'Enter your Email';
                   }
                   return null;
                 },
-
               ),
               const SizedBox(
                 height: 12,
@@ -116,30 +72,40 @@ print(requestbody);
                   }
                   return null;
                 },
-
               ),
               const SizedBox(
                 height: 16,
               ),
-              SizedBox(
-                width: double.infinity,
-                child: Visibility(
-                  visible: _signin == false,
-                  replacement: const Center(child: CircularProgressIndicator(),),
-                  child: ElevatedButton(
-                      onPressed: () {
-                        signin();
-                      },
-                      child: Icon(Icons.arrow_circle_right_rounded)),
-                ),
-              ),
+              GetBuilder<SignInController>(
+                  builder: (signinController) {
+                return SizedBox(
+                  width: double.infinity,
+                  child: Visibility(
+                    visible: signinController.signinprogress == false,
+                    replacement: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    child: ElevatedButton(
+                        onPressed: () {
+                          signinController
+                              .signin(_emailtecontroller.text.trim(),
+                                  _passtecontroller.text)
+                              .then((result) {
+                            if (result == true) {
+                              Get.offAll(BottomNave());
+                            } else {
+                              Get.snackbar('Failed', 'Login failed');
+                            }
+                          });
+                        },
+                        child: Icon(Icons.arrow_circle_right_rounded)),
+                  ),
+                );
+              }),
               Center(
                   child: TextButton(
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => forgetpass()));
+                        Get.off(const forgetpass());
                       },
                       child: Text(
                         'Forgot Password?',
@@ -158,8 +124,7 @@ print(requestbody);
                   ),
                   TextButton(
                       onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => signup()));
+                        Get.off(SignupScreen());
                       },
                       child: Text("Sign up ")),
                 ],

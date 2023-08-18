@@ -4,6 +4,7 @@ import 'package:module11/screen/basescreen.dart';
 import 'package:module11/screen/loginscreen.dart';
 import 'package:module11/utils/asset_utils.dart';
 import 'package:module11/utils/signindata.dart';
+import 'package:get/get.dart';
 
 class splashscrn extends StatefulWidget {
   const splashscrn({super.key});
@@ -16,6 +17,9 @@ class _splashscrnState extends State<splashscrn> {
 
 
 
+final Signindata signindata = Get.find<Signindata>();
+
+
   @override
   void initState() {
     super.initState();
@@ -23,14 +27,10 @@ class _splashscrnState extends State<splashscrn> {
   }
 
   void navigatetologin() {
-    Future.delayed(Duration(seconds: 3)).then((_) async {
-      final bool isLoggedin = await Signindata.checkinfo();
+    Future.delayed(const Duration(seconds: 3)).then((_) async {
+      final bool isLoggedin = await signindata.checkinfo();
       if(mounted){
-        Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-                builder: (context) => isLoggedin ? const bottomnave() : const loginscrn()),
-            (route) => false);
+        Get.offAll(isLoggedin ? const BottomNave() : const loginscrn());
       }
     });
 
@@ -45,7 +45,7 @@ class _splashscrnState extends State<splashscrn> {
           child: Container(
             width: double.infinity,
             height: double.infinity,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage(
                   assetutils.splitscrn,

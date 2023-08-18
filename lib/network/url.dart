@@ -10,6 +10,9 @@ class urls{
   static String progesstask = '$_baseurls/listTaskByStatus/Progress';
   static String cancledtask = '$_baseurls/listTaskByStatus/Cancel';
   static String deletetask(String id) => '$_baseurls/deleteTask/$id';
+  static String emailverification(String email) => '$_baseurls/RecoverVerifyEmail/$email';
+  static String otpverification(String email, String otp) => '$_baseurls/RecoverVerifyOTP/$email/$otp';
   static String updatetask(String id,String status) => '$_baseurls/updateTaskStatus/$id/$status';
   static String profileupdate = '$_baseurls/profileUpdate';
+  static String resetPassword = '$_baseurls/RecoverResetPass';
 }

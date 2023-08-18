@@ -39,7 +39,7 @@ class _userinfoState extends State<userinfo> {
         radius: 18,
       ),
       title: Text(
-        '${Signindata.userinfo.data!.firstName }${Signindata.userinfo.data?.lastName ?? ''}',
+        '${Signindata.userinfo.data!.firstName?? ''} ${Signindata.userinfo.data?.lastName ?? ''}',
         style: TextStyle(
           color: Colors.white,
           fontSize: 14,

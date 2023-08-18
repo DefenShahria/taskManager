@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:module11/screen/splashscrn.dart';
+import 'package:module11/state_manager/Summery_Count_controller.dart';
+import 'package:module11/state_manager/deletTaskController.dart';
+import 'package:module11/state_manager/signin_controller.dart';
+import 'package:module11/state_manager/signup_controller.dart';
+import 'package:module11/state_manager/task_manage_controller.dart';
+
+import 'state_manager/updateProfile_Controller.dart';
+import 'utils/signindata.dart';
 
 class TaskManager extends StatefulWidget {
 
   static GlobalKey<ScaffoldState> globalKey = GlobalKey<ScaffoldState>();
 
-   TaskManager({super.key});
+   const TaskManager({super.key});
 
   @override
   State<TaskManager> createState() => _TaskManagerState();
@@ -16,7 +25,7 @@ class _TaskManagerState extends State<TaskManager> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       key: TaskManager.globalKey,
       debugShowCheckedModeBanner: false,
       title: 'Task Manager',
@@ -46,7 +55,7 @@ class _TaskManagerState extends State<TaskManager> {
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.black54,
-            padding: EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 10),
             elevation: 3,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
@@ -55,6 +64,7 @@ class _TaskManagerState extends State<TaskManager> {
         ),
 
       ),
+      initialBinding: ControllerBinding(),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
         inputDecorationTheme: const InputDecorationTheme(
@@ -68,7 +78,7 @@ class _TaskManagerState extends State<TaskManager> {
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.amber,
-          padding: EdgeInsets.symmetric(vertical: 10),
+          padding: const EdgeInsets.symmetric(vertical: 10),
           elevation: 3,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
@@ -77,8 +87,24 @@ class _TaskManagerState extends State<TaskManager> {
       ),
     ),
     themeMode: ThemeMode.light,
-    home: splashscrn()
+    home: const splashscrn()
     ,
     );
   }
+}
+
+class ControllerBinding extends Bindings{
+  @override
+  void dependencies() {
+
+    Get.put<SignInController>(SignInController());
+    Get.put<SummeryCountController>(SummeryCountController());
+    Get.put<TaskkManageController>(TaskkManageController());
+    Get.put<DeletTaskController>(DeletTaskController());
+    Get.put<SignUpController>(SignUpController());
+    Get.put<Signindata>(Signindata());
+    Get.put<ProfileUpdateController>(ProfileUpdateController());
+
+  }
+
 }

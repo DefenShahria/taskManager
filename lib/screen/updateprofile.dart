@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:module11/network/networkcall.dart';
 import 'package:module11/network/networkresponse.dart';
+import 'package:module11/state_manager/updateProfile_Controller.dart';
 import 'package:module11/utils/signin_Model.dart';
 import 'package:module11/utils/signindata.dart';
-import 'package:module11/widgets/profile.dart';
-import '../utils/signindata.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:module11/network/url.dart';
 
@@ -23,6 +23,10 @@ class _ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
   final TextEditingController _mobileETController = TextEditingController();
   final TextEditingController _passwordETController = TextEditingController();
 
+  final Signindata signindata = Get.find<Signindata>();
+
+  final ProfileUpdateController profileUpdateController = Get.find<ProfileUpdateController>();
+
   bool _inProgress = false;
   XFile? pickedImage;
   String? base64Image;
@@ -37,45 +41,6 @@ class _ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
     _mobileETController.text = Signindata.userinfo.data?.mobile ?? '';
   }
 
-  void updateProfile() async {
-    if (pickedImage != null) {
-      List<int> imageBytes = await pickedImage!.readAsBytes();
-      base64Image = base64Encode(imageBytes);
-    }
-
-    _inProgress = true;
-    setState(() {});
-
-    Map<String, String> body = {
-      "firstName": _firstNameETController.text.trim(),
-      "lastName": _lastNameETController.text.trim(),
-      "mobile": _mobileETController.text.trim(),
-    };
-
-    if (_passwordETController.text.isNotEmpty) {
-      body['password'] = _passwordETController.text;
-    }
-
-    final Networkresponse response =
-        await Networkcall().postRequest(urls.profileupdate, body);
-
-    if (response.issuccess) {
-      Signindata.userinfo.data!.firstName = _firstNameETController.text.trim();
-      Signindata.userinfo.data!.lastName = _lastNameETController.text.trim();
-      Signindata.userinfo.data!.mobile = _mobileETController.text.trim();
-      Signindata.updateInfo(Signindata.userinfo as Data);
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Profile update successfully')));
-    } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Profile update failed')));
-    }
-    _inProgress = false;
-
-    if (mounted) {
-      setState(() {});
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -233,7 +198,27 @@ class _ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
                                   if (!_formKey.currentState!.validate()) {
                                     return;
                                   }
-                                  updateProfile();
+                                  profileUpdateController.updateProfile(
+                                      _firstNameETController.text.trim(),
+                                      _lastNameETController.text.trim(),
+                                      _mobileETController.text.trim(),
+                                      _passwordETController.text,
+                                      pickedImage,
+
+                                  ).then((value) {
+                                    if(value == true){
+                                      Signindata.userinfo.data!.firstName = _firstNameETController.text.trim();
+                                      Signindata.userinfo.data!.lastName = _lastNameETController.text.trim();
+                                      Signindata.userinfo.data!.mobile = _mobileETController.text.trim();
+                                      print('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+                                      signindata.updateInfo(Signindata.userinfo.data!);
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                          const SnackBar(content: Text('Profile update successfully')));
+                                    }else{
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(content: Text('Profile update failed')));
+                                    }
+                                  });
                                 },
                                 child: const Icon(
                                     Icons.arrow_circle_right_rounded)),
@@ -264,8 +249,10 @@ class _ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
 
                   if (mounted) {
                     if (pickedImage != null) {
-                      setState(() {});
-                      Navigator.pop(context);
+                      profileUpdateController.updateUI();
+
+                     // Navigator.pop(context);
+                      Get.back(result: context);
                     }
                   }
                 },
@@ -278,8 +265,8 @@ class _ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
                       .pickImage(source: ImageSource.gallery);
                   if (mounted) {
                     if (pickedImage != null) {
-                      setState(() {});
-                      Navigator.pop(context);
+                      profileUpdateController.updateUI();
+                      Get.back(result: context);
                     }
                   }
                 },

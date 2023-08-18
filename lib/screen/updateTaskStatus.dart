@@ -1,10 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:module11/network/networkcall.dart';
-import 'package:module11/network/networkresponse.dart';
+import 'package:get/get.dart';
+import 'package:module11/state_manager/task_manage_controller.dart';
 import 'package:module11/utils/taskListModel.dart';
-import 'package:module11/network/url.dart';
 
 
 class updateTaskStatus extends StatefulWidget {
@@ -17,7 +14,7 @@ class updateTaskStatus extends StatefulWidget {
 }
 
 class _updateTaskStatusState extends State<updateTaskStatus> {
-  List<String> TaskStatus =['new', 'progress','cancel','completed'];
+  List<String> TaskStatus =['New', 'Progress','Cancel','Completed'];
    late String _selectedTask;
    bool updateTaskprog = false;
 
@@ -26,32 +23,36 @@ class _updateTaskStatusState extends State<updateTaskStatus> {
     _selectedTask = widget.task.status!.toLowerCase();
     super.initState();
   }
-  Future<void>updatetask(String taskid, String newstatus) async{
-    updateTaskprog = true;
-    if(mounted) {
-      setState(() {});
-    }
-    print(newstatus);
-    print(taskid);
-    final Networkresponse response = await Networkcall().getRequest(urls.updatetask(taskid,newstatus));
-    print(response.body);
-    updateTaskprog = false;
-    if(mounted) {
-      setState(() {});
-    }
-    if(response.issuccess){
-      widget.onupdate();
-      if(mounted) {
-        Navigator.pop(context);
-      }
-      }
-    else{
-      if(mounted){
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('Update Failed')));
-      }
-    }
-  }
+  // Future<void>updatetask(String taskid, String newstatus) async{
+  //   updateTaskprog = true;
+  //   if(mounted) {
+  //     setState(() {});
+  //   }
+  //   print(newstatus);
+  //   print(taskid);
+  //   final Networkresponse response = await Networkcall().getRequest(urls.updatetask(taskid,newstatus));
+  //   print(response.body);
+  //   updateTaskprog = false;
+  //   if(mounted) {
+  //     setState(() {});
+  //   }
+  //   if(response.issuccess){
+  //     widget.onupdate();
+  //     if(mounted) {
+  //       Navigator.pop(context);
+  //     }
+  //     }
+  //   else{
+  //     if(mounted){
+  //       ScaffoldMessenger.of(context)
+  //           .showSnackBar(const SnackBar(content: Text('Update Failed')));
+  //     }
+  //   }
+  // }
+
+
+  final TaskkManageController taskkManageController = Get.find<TaskkManageController>();
+
 
 
   @override
@@ -87,7 +88,7 @@ class _updateTaskStatusState extends State<updateTaskStatus> {
               replacement: const Center(child: CircularProgressIndicator(),) ,
               child: ElevatedButton(
                 onPressed: () {
-                  updatetask(widget.task.sId!, _selectedTask);
+                  taskkManageController.updatetask(widget.task.sId!, _selectedTask);
                 },
                 child: const Icon(Icons.update),
               ),

@@ -1,10 +1,11 @@
 import 'dart:convert';
 
+import 'package:get/get.dart';
 import 'package:module11/utils/signin_Model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Signindata {
-  Signindata._();
+class Signindata extends GetxController {
+
   static Signinmodel userinfo = Signinmodel();
 
   static Future<void> saveinfo(Signinmodel model) async {
@@ -14,10 +15,11 @@ class Signindata {
     userinfo=model;
   }
 
-  static Future<void> updateInfo(Data data) async {
+   Future<void> updateInfo(Data data) async {
     print(data.firstName);
     userinfo.data = data;
     SharedPreferences _logindata = await SharedPreferences.getInstance();
+    update();
     await _logindata.setString('User-data', jsonEncode(userinfo.toJson()));
   }
 
@@ -33,11 +35,12 @@ class Signindata {
     await _logindata.clear();
   }
 
-  static Future<bool> checkinfo() async {
+   Future<bool> checkinfo() async {
     SharedPreferences _logindata = await SharedPreferences.getInstance();
     bool isSignin = _logindata.containsKey('User-data');
     if (isSignin) {
       userinfo = await getinfo() ?? Signinmodel(); // Provide a default value when getinfo() returns null.
+    update();
     }
     return isSignin;
   }

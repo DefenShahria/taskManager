@@ -4,14 +4,14 @@ import 'package:module11/screen/completed.dart';
 import 'package:module11/screen/inprogress.dart';
 import 'package:module11/screen/newtsk.dart';
 
-class bottomnave extends StatefulWidget {
-  const bottomnave({super.key});
+class BottomNave extends StatefulWidget {
+  const BottomNave({super.key});
 
   @override
-  State<bottomnave> createState() => _bottomnaveState();
+  State<BottomNave> createState() => _BottomNaveState();
 }
 
-class _bottomnaveState extends State<bottomnave> {
+class _BottomNaveState extends State<BottomNave> {
 
   int _selectscreen =0;
 
@@ -27,11 +27,11 @@ class _bottomnaveState extends State<bottomnave> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: _screen[_selectscreen],
-       bottomNavigationBar: BottomNavigationBar(
-         currentIndex: _selectscreen,
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectscreen,
         unselectedItemColor: Colors.black,
         unselectedLabelStyle: const TextStyle(
-          color: Colors.black
+            color: Colors.black
         ),
         showUnselectedLabels: true,
         selectedItemColor: Colors.cyan,
